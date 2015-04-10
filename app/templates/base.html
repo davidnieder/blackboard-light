@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block head %}
+  <meta charset="utf-8">
+  <meta name="csrf_token" value="{{ csrf_token() }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='default.css')}} ">
+{% block title %}
+  <title>Blackboard Light</title>
+{% endblock %}
+{% endblock %}
+</head>
+<body>
+
+<div id="container">
+{# navigation block #}
+{% block navigation %}
+  <section id="navigation"><p>
+    <a href="{{ url_for('.index') }}">home</a> | 
+    <a href="#">search</a> |
+    {% if current_user.is_anonymous() %}
+    <a href="{{ url_for('.login') }}">login</a>
+    {% else %}
+    <a href="{{ url_for('.new_post') }}">new post</a> | 
+    logged in as <i>{{ current_user.name }}</i>
+    (<a href="{{ url_for('.logout', csrfToken=csrf_token()) }}">logout</a>)
+    {% endif %}
+    <hr>
+  </section>  <!-- end block navigation -->
+{% endblock %}
+  
+{# message flashing #}
+{% block flash_messages %}
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+  <section id="messages">
+{% for category, message in messages %}
+    <div class="{{ category }}">{{ message }}</div>
+{% endfor %}
+    <hr>
+  </section>  <!-- end block messages -->
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{#- content block #}
+{% block content %}
+{% endblock %}
+
+{# site footer #}
+  <section id="site-footer">
+    <hr>
+    site footer
+  </section>
+
+</div>  <!-- end block container -->
+</body>
+</html>

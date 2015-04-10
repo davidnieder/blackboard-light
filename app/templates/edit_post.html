@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>Edit Post</title>
+{% endblock %}
+
+{% block content %}
+  <div><p>
+    <form method="POST" action="{{ url_for('.edit_post', postId=post_id) }}">
+      {{ post_form.hidden_tag() }}
+      {{ post_form.title.label }}: 
+      {% if post_form.title.errors %}({{ post_form.title.errors[0] }}){% endif %}
+      <br>
+      {{ post_form.title }}
+      <br>
+      {{ post_form.content.label }}: 
+      {% if post_form.content.errors %}({{ post_form.content.errors[0]}}){% endif %}
+      <br>
+      {{ post_form.content }}
+      <br>
+      {{ post_form.tags.label }}: 
+      {% if post_form.tags.errors %}({{ post_form.tags.errors[0] }}){% endif %}
+      <br>
+      {{ post_form.tags }}
+      <br>
+      {{ post_form.is_public.label }}
+      {{ post_form.is_public }}
+      <br>
+      {{ post_form.submit }}
+      <br>
+    </form>
+
+  <div>
+    <form method="GET" action="{{ url_for('.delete_post') }}">
+      <div style="display:none">
+        <input type="hidden" name="postId" value="{{ post_id }}">
+        <input type="hidden" name="csrfToken" value="{{ csrf_token() }}">
+      </div>
+    <input type="submit" value="Delete Post"></form></div>
+  </div>
+{% endblock %}
+

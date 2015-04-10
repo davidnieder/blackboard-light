@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>login</title>
+{% endblock %}
+
+{% block content %}
+  <h3>login</h3>
+
+  <form method="POST" action="{{ url_for('.login') }}">
+    {{ login_form.hidden_tag() }}
+    {{ login_form.name.label }}: {{ login_form.name }}
+    {% if login_form.name.errors %}({{ login_form.name.errors[0] }}){% endif %}
+    <br>
+    {{ login_form.password.label }}: {{ login_form.password }}
+    {% if login_form.password.errors %}({{ login_form.password.errors[0] }}){% endif %}
+    <br>
+    {{ login_form.remember_me.label }} {{ login_form.remember_me }}
+    <br>
+    {{ login_form.submit }}
+    <br>
+  </form>
+{% endblock %}
