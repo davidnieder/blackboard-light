@@ -1,0 +1,6 @@
+*~
+*.swp
+*.pyc
+config_production.py
+app/blackboard_development.db
+venv/
