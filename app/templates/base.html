@@ -3,29 +3,34 @@
 <head>
 {% block head %}
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf_token" value="{{ csrf_token() }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='default.css')}} ">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='normalize.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='blackboard.css') }}">
+
 {% block title %}
   <title>Blackboard Light</title>
 {% endblock %}
 {% endblock %}
 </head>
 <body>
+<div class="container">
 
-<div id="container">
 {# navigation block #}
 {% block navigation %}
-  <section id="navigation"><p>
-    <a href="{{ url_for('.index') }}">home</a> | 
-    <a href="#">search</a> |
-    {% if current_user.is_anonymous() %}
-    <a href="{{ url_for('.login') }}">login</a>
-    {% else %}
-    <a href="{{ url_for('.new_post') }}">new post</a> | 
-    logged in as <i>{{ current_user.name }}</i>
-    (<a href="{{ url_for('.logout', csrfToken=csrf_token()) }}">logout</a>)
-    {% endif %}
-    <hr>
+  <section id="navigation">
+      <a href="{{ url_for('.index') }}">Home</a> | 
+      <a href="#">Search</a> |
+      {% if current_user.is_anonymous() %}
+      <a href="{{ url_for('.login') }}">Login</a>
+      {% else %}
+      <a href="{{ url_for('.new_post') }}">New post</a> | 
+      logged in as <i>{{ current_user.name }}</i>
+      (<a href="{{ url_for('.logout', csrfToken=csrf_token()) }}">Logout</a>)
+      {% endif %}
+      <hr>
   </section>  <!-- end block navigation -->
 {% endblock %}
   
@@ -49,7 +54,6 @@
 
 {# site footer #}
   <section id="site-footer">
-    <hr>
     site footer
   </section>
 

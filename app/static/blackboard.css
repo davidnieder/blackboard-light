@@ -1,0 +1,51 @@
+/* navigation */
+section#navigation {
+  margin-top: 1rem;
+}
+
+/* flash messages */
+section#messages .info  {
+  color: #222;
+  font-size: 105%;
+  font-weight: 500;
+}
+section#messages .error  {
+  color: #F00;
+}
+
+/* posts */
+section#content article {
+  margin-bottom: 3rem;
+}
+section#content article header  {
+  min-height: 1.6rem;
+}
+section#content .post-content {
+  color: #000;
+  font-size: 102%;
+  text-align: justify;
+  margin-bottom: 2rem;
+}
+section#content .post-content * {
+  max-width: 100% !important;
+}
+section#content article footer  {
+  font-size: 92%;
+}
+
+/* footer */
+section#site-footer {
+  font-size: 90%;
+}
+
+.checkbox-with-label  {
+  margin-bottom: 1.5rem;
+}
+.checkbox-with-label input  {
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+.checkbox-with-label label  {
+  display: inline;
+  vertical-align: middle;
+}

@@ -31,17 +31,17 @@ class TagListField(Field):
 
 
 class LoginForm(Form):
-    name = StringField('Username', validators=[Required(), Length(3, 40)])
-    password = PasswordField('Password', validators=[Required()])
+    name = StringField('Username:', validators=[Required(), Length(3, 40)])
+    password = PasswordField('Password:', validators=[Required()])
     remember_me = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
 
 class PostForm(Form):
-    title = StringField('Title', validators=[Optional(), Length(1,120)])
-    content = TextAreaField('Content', validators=[Required()])
+    title = StringField('Title:', validators=[Optional(), Length(1,120)])
+    content = TextAreaField('Content:', validators=[Required()])
     is_public = BooleanField('Public post', false_values=('false', 'n', ''))
-    tags = TagListField('Tags')
+    tags = TagListField('Tags (comma separated):')
     submit = SubmitField('Submit')
 
     def from_model(self, post):

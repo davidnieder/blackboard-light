@@ -5,30 +5,28 @@
 {% endblock %}
 
 {% block content %}
-  <div><p>
+  <section id="new-post">
+    <h4>New Post</h4>
     <form method="POST" action="{{ url_for('.new_post') }}">
       {{ post_form.hidden_tag() }}
-      {{ post_form.title.label }}: 
+
+      {{ post_form.title.label }}
       {% if post_form.title.errors %}({{ post_form.title.errors[0] }}){% endif %}
-      <br>
       {{ post_form.title }}
-      <br>
-      {{ post_form.content.label }}: 
+
+      {{ post_form.content.label }}
       {% if post_form.content.errors %}({{ post_form.content.errors[0]}}){% endif %}
-      <br>
       {{ post_form.content }}
-      <br>
-      {{ post_form.tags.label }}: 
+
+      {{ post_form.tags.label }}
       {% if post_form.tags.errors %}({{ post_form.tags.errors[0] }}){% endif %}
-      <br>
       {{ post_form.tags }}
-      <br>
-      {{ post_form.is_public.label }}
-      {{ post_form.is_public }}
-      <br>
+
+      <div class="checkbox-with-label">
+       {{ post_form.is_public }} {{ post_form.is_public.label }}
+      </div>
       {{ post_form.submit }}
-      <br>
     </form>
-  </div>
+  </section> <!-- end block new-post -->
 {% endblock %}
 
