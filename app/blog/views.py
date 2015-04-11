@@ -230,7 +230,7 @@ class EditPost(BaseView):
             db.session.commit()
 
             flash(messages.post_edited, 'info')
-            return redirect(url_for('.index', page=self.request_args.page.data))
+            return redirect(url_for('.index', postId=self.post_obj.id))
 
         flash(messages.post_editing_error, 'error')
         return render_template(self.template, post_form=form,
