@@ -114,4 +114,8 @@ class PostQuery(object):
         else:
             query = query.order_by(Post.id.desc())
 
+        # limit post amount, ignore when paginating
+        if self.query_args.limit.data and not self.paginate:
+            query = query.limit(self.query_args.limit.data)
+
         self.query = query
