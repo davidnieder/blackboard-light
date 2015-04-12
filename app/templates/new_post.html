@@ -11,20 +11,27 @@
       {{ post_form.hidden_tag() }}
 
       {{ post_form.title.label }}
-      {% if post_form.title.errors %}({{ post_form.title.errors[0] }}){% endif %}
       {{ post_form.title }}
+      {% if post_form.title.errors %}
+      <span class="wtforms-error">({{ post_form.title.errors[0] }})</span>
+      {% endif %}
 
       {{ post_form.content.label }}
-      {% if post_form.content.errors %}({{ post_form.content.errors[0]}}){% endif %}
       {{ post_form.content }}
+      {% if post_form.content.errors %}
+      <span class="wtforms-error">({{ post_form.content.errors[0]}})</span>
+      {% endif %}
 
       {{ post_form.tags.label }}
-      {% if post_form.tags.errors %}({{ post_form.tags.errors[0] }}){% endif %}
       {{ post_form.tags }}
+      {% if post_form.tags.errors %}
+      <span class="wtforms-error">({{ post_form.tags.errors[0] }})</span>
+      {% endif %}
 
       <div class="checkbox-with-label">
-       {{ post_form.is_public }} {{ post_form.is_public.label }}
+        {{ post_form.is_public }} {{ post_form.is_public.label }}
       </div>
+
       {{ post_form.submit }}
     </form>
   </section> <!-- end block new-post -->

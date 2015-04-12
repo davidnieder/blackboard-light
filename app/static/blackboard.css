@@ -49,3 +49,10 @@ section#site-footer {
   display: inline;
   vertical-align: middle;
 }
+
+textarea + span.wtforms-error {
+  vertical-align: top;
+}
+.wtforms-error  {
+  color: #F00;
+}

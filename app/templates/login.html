@@ -9,10 +9,19 @@
     <h4>Login</h4>
     <form method="POST" action="{{ url_for('.login') }}">
       {{ login_form.hidden_tag() }}
-      {{ login_form.name.label }}{{ login_form.name }}
-      {% if login_form.name.errors %}({{ login_form.name.errors[0] }}){% endif %}
-      {{ login_form.password.label }}{{ login_form.password }}
-      {% if login_form.password.errors %}({{ login_form.password.errors[0] }}){% endif %}
+
+      {{ login_form.name.label }}
+      {{ login_form.name }}
+      {% if login_form.name.errors %}
+      <span class="wtforms-error">({{ login_form.name.errors[0] }})</span>
+      {% endif %}
+
+      {{ login_form.password.label }}
+      {{ login_form.password }}
+      {% if login_form.password.errors %}
+      <span class="wtforms-error">({{ login_form.password.errors[0] }})</span>
+      {% endif %}
+
       <div class="checkbox-with-label">
         {{ login_form.remember_me }} {{ login_form.remember_me.label }}
       </div>
