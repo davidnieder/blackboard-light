@@ -202,6 +202,22 @@ class ViewTestsValid(ViewTestsBase):
         for post in itertools.islice(self.posts, 5, None):
             self.assertTrue(self.post_in_response(post, resp))
 
+    def test_index_query_multiple_args(self):
+        # query with multiple arguments
+        self.populate_database()
+        self.login('linus', 'vanPelt')
+        resp = self.client.get('/?postId=1&beforePost=3&onlyPrivate=False&order=asc')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(self.post_in_response(self.posts[0], resp))
+        for post in itertools.islice(self.posts, 1, None):
+            self.assertFalse(self.post_in_response(post, resp))
+        resp = self.client.get('/?onlyPublicPosts=true&page=1&sincePost=6')
+        self.assertEqual(resp.status_code, 200)
+        for post in itertools.islice(self.posts, 0, 7):
+            self.assertFalse(self.post_in_response(post, resp))
+        for post in itertools.islice(self.posts, 7, None):
+            self.assertTrue(self.post_in_response(post, resp))
+
     # test login view #
     def test_get_login_page(self):
         resp = self.client.get('/login')

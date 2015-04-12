@@ -7,12 +7,79 @@ from .view_tests_base import ViewTestsBase
 
 class ViewTestsHTTPErrors(ViewTestsBase):
 
-    def test_index_http_errors(self):
+    def test_index_wrong_method(self):
         # invalid request method
         resp = self.client.post('/', data={'csrf_token':self.get_csrf_token()})
         self.assertEqual(resp.status_code, 405)
         self.assertEqual(resp.mimetype, 'text/html')
         self.assertTrue('Method Not Allowed' in resp.get_data())
+
+    def test_index_malformed_query_args(self):
+        # postId
+        resp = self.client.get('/?postId=0')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        resp = self.client.get('/?postId=abc')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # sincePost
+        resp = self.client.get('/?sincePost=0')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        resp = self.client.get('/?sincePost=abc')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # beforePost
+        resp = self.client.get('/?beforePost=0')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        resp = self.client.get('/?beforePost=abc')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # page
+        resp = self.client.get('/?page=0')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        resp = self.client.get('/?page=abc')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # order
+        resp = self.client.get('/?order=abc')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # since
+        resp = self.client.get('/?since=13042015')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # before
+        resp = self.client.get('/?before=1234')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # createdOn
+        resp = self.client.get('/?createdOn=abcdefg')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        # limit
+        resp = self.client.get('/?limit=0')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
+        resp = self.client.get('/?limit=abc')
+        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.mimetype, 'text/html')
+        self.assertTrue('Bad Request' in resp.get_data())
 
     def test_login_view_http_errors(self):
         # post request without csrf token
