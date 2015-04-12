@@ -44,6 +44,6 @@ class ViewTestsBase(unittest.TestCase):
 
     def post_in_response(self, post, response):
         title = '<header><h4>%s</h4></header>' %post[0]
-        content = '<div class="post-content"><p>%s</div>' %post[1]
+        content = '<div class="post-content">%s</div>' %post[1]
         return title in response.get_data() and content in response.get_data()
 
