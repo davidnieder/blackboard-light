@@ -2,16 +2,16 @@
 
 from datetime import timedelta
 
-from flask import render_template, request, redirect, url_for, abort, session
-from flask import jsonify, flash, get_flashed_messages, current_app as app
+from flask import render_template, request, redirect, url_for, abort
+from flask import jsonify, flash, get_flashed_messages
 from flask.views import View
 from flask.ext.login import login_user, logout_user, login_required
 from flask.ext.login import current_user
 from flask_wtf.csrf import validate_csrf
 
 from ..forms import LoginForm, PostForm, RequestArgs
-from ..models import User, Post, Tag
-from .. import db
+from ..models import db, User, Post, Tag
+from ..query import PostQuery
 from . import messages
 
 
@@ -45,87 +45,15 @@ class Index(BaseView):
         BaseView.__init__(self)
 
     def get(self):
-        query = Post.query
-        next_req_args = {}
+        query = PostQuery(query_args=self.request_args, paginate=True)
+        query.fire()
 
-        # a not logged-in user can only see public posts
-        if not current_user.is_authenticated():
-            query = query.filter_by(is_public=True)
-
-        # query for a particular post
-        if self.request_args.postId.data:
-            query = query.filter_by(id=self.request_args.postId.data)
-            next_req_args['postId'] = self.request_args.postId.data
-
-        # all posts with an id greater than x
-        if self.request_args.sincePost.data:
-            query = query.filter(Post.id>self.request_args.sincePost.data)
-            next_req_args['sincePost'] = self.request_args.sincePost.data
-
-        # all posts with an id smaller than x
-        if self.request_args.beforePost.data:
-            query = query.filter(Post.id<self.request_args.beforePost.data)
-            next_req_args['beforePost'] = self.request_args.beforePost.data
-
-        # exclude posts which are marked private
-        if self.request_args.onlyPublicPosts.data is True:
-            query = query.filter(Post.is_public == True)
-
-        # exclude posts which are marked public
-        if self.request_args.onlyPrivatePosts.data is True:
-            query = query.filter(Post.is_public == False)
-
-        # all posts from a specific user
-        if self.request_args.user.data:
-            user = User.query.filter_by(name=self.request_args.user.data).first()
-            user_id = user.id if user else 0
-            query = query.filter_by(user_id=user_id)
-            next_req_args['user'] = self.request_args.user.data
-
-        # all posts with certain tags, ignoring tags that don't exist
-        if self.request_args.tags.data:
-            next_req_args['tags'] = self.request_args.tags.query_string()
-            for tag in self.request_args.tags.data:
-                query = query.filter(Post.tags.any(name=tag.name))
-
-        # all posts created since a given date, excluding posts from the date
-        if self.request_args.since.data:
-            date = self.request_args.since.data
-            query = query.filter(Post.time >= date+timedelta(1))
-            next_req_args['since'] = self.request_args.since.data.isoformat()
-
-        # all posts created before a given date
-        if self.request_args.before.data:
-            query = query.filter(Post.time < self.request_args.before.data)
-            next_req_args['before'] = self.request_args.before.data.isoformat()
-
-        # all posts created on a specific data
-        if self.request_args.createdOn.data:
-            date = self.request_args.createdOn.data
-            query = query.filter(Post.time >= date)
-            query = query.filter(Post.time < date+timedelta(1))
-            next_req_args['createdOn'] = date.isoformat()
-
-        # order posts ascending if requested and descending by default
-        if self.request_args.order.data == u'asc':
-            query = query.order_by(Post.id.asc())
-            next_req_args['order'] = u'asc'
-        else:
-            query = query.order_by(Post.id.desc())
-
-        # pagination
-        page_no = self.request_args.page.data if self.request_args.page.data \
-                    else 1
-        query = query.paginate(page_no, app.config.get('POSTS_PER_PAGE'), False)
-
-        # store everything needed for the response in response_data
         self.response_data['post_list'] = [post.to_public_dict() \
-                                           for post in query.items]
-        self.response_data['prev_page'] = query.prev_num
-        self.response_data['current_page'] = query.page
-        self.response_data['next_page'] = query.next_num if \
-                                            query.has_next else 0
-        self.response_data['query_args'] = next_req_args
+                                           for post in query.post_list]
+        self.response_data['prev_page'] = query.previous_page
+        self.response_data['current_page'] = query.current_page
+        self.response_data['next_page'] = query.next_page
+        self.response_data['query_args'] = query.next_req_args
 
         if query.total == 0 and Post.query.count() == 0:
             flash(messages.empty_database, 'info')
