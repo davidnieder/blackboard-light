@@ -5,36 +5,10 @@ from datetime import date, timedelta
 
 from app.blog import messages
 
-from .view_tests_base import ViewTestsBase
+from .tests_base import TestsBase
 
 
-class ViewTestsValid(ViewTestsBase):
-
-    def populate_database(self):
-        self.users = [
-            # name,     password,   admin
-            ['linus',   'vanPelt',  False],
-            ['sally',   'brown',    False]]
-        self.posts = [
-            # title,    content,        tags,           public, user
-            ['Post#1',  'first post',   'text',         'n',    0],
-            ['Post#2',  'second post',  'music',        'y',    0],
-            ['Post#3',  'third post',   'video',        'n',    1],
-            ['Post#4',  'fourth post',  'music,video',  'n',    0],
-            ['Post#5',  'fifth post',   '',             'y',    0],
-            ['Post#6',  'sixth post',   'text,poetry',  'n',    1],
-            ['Post#7',  'seventh post', '',             'n',    1],
-            ['Post#8',  'eighth post',  'video',        'y',    1],
-            ['Post#9',  'ninth post',   'video,music',  'y',    0],
-            ['Post#10', 'tenth post',   'politics',     'y',    1]]
-
-        for user in self.users:
-            self.create_user(user[0], user[1], user[2])
-
-        for post in self.posts:
-            self.login(self.users[post[4]][0], self.users[post[4]][1])
-            self.create_post(post[0], post[1], post[2], post[3])
-        self.logout()
+class ViewTestsValid(TestsBase):
 
     # test index view #
     def test_index_view_get_empty_db(self):
@@ -55,7 +29,7 @@ class ViewTestsValid(ViewTestsBase):
                 self.assertFalse(self.post_in_response(post, resp))
 
     def test_index_query_postid_arg(self):
-        self.populate_database()
+        self.populate_database(2)
         # query single post
         resp = self.client.get('/?postId=2')
         self.assertEqual(resp.status_code, 200)
@@ -147,7 +121,7 @@ class ViewTestsValid(ViewTestsBase):
 
     def test_index_query_createdon_arg(self):
         # query posts created on a date x
-        self.populate_database()
+        self.populate_database(self.posts_per_page)
         resp = self.client.get('/?createdOn='+(date.today()-timedelta(1)).isoformat())
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(messages.empty_response in resp.get_data())

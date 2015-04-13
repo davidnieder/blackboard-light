@@ -2,10 +2,10 @@
 
 from app.blog import messages
 
-from .view_tests_base import ViewTestsBase
+from .tests_base import TestsBase
 
 
-class ViewTestsHTTPErrors(ViewTestsBase):
+class ViewTestsHTTPErrors(TestsBase):
 
     def test_index_wrong_method(self):
         # invalid request method
