@@ -65,7 +65,8 @@ class RequestArgs(Form):
     since = DateField()
     before = DateField()
     createdOn = DateField()
-    limit = IntegerField(validators=[Optional(), NumberRange(min=1)])
+    limit = IntegerField(validators=[Optional(), NumberRange(min=1,max=10)],
+                         default=5)
     csrfToken = StringField()
 
     def __init__(self, csrf_enabled=False, *args, **kwargs):

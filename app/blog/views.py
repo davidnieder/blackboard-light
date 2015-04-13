@@ -7,7 +7,7 @@ from flask import jsonify, flash, get_flashed_messages
 from flask.views import View
 from flask.ext.login import login_user, logout_user, login_required
 from flask.ext.login import current_user
-from flask_wtf.csrf import validate_csrf
+from flask.ext.wtf.csrf import validate_csrf
 
 from ..forms import LoginForm, PostForm, RequestArgs
 from ..models import db, User, Post, Tag
@@ -137,9 +137,8 @@ class EditPost(BaseView):
         if not self.request_args.postId.data:
             abort(400)
 
-        self.post_obj = Post.query.get(self.request_args.postId.data)
-        if not self.post_obj:
-            abort(404)
+        self.post_obj = Post.query.get_or_404(self.request_args.postId.data)
+
         if self.post_obj.user_id != current_user.id and not current_user.is_admin:
             abort(403)
 

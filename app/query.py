@@ -30,7 +30,6 @@ class PostQuery(object):
         else:
             self.post_list = self.query.all()
             self.results = len(self.post_list)
-            self.total = len(self.post_list)
         return self
 
     def _paginate(self):
@@ -116,6 +115,7 @@ class PostQuery(object):
 
         # limit post amount, ignore when paginating
         if self.query_args.limit.data and not self.paginate:
+            self.total = query.count()
             query = query.limit(self.query_args.limit.data)
 
         self.query = query

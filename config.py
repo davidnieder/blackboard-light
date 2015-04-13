@@ -4,7 +4,7 @@
 class Config(object):
     DEBUG = False
     TESTING = False
-    POSTS_PER_PAGE = 3
+    POSTS_PER_PAGE = 5
 
 
 class DevelopmentConfig(Config):
