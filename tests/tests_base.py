@@ -81,11 +81,19 @@ class TestsApiBase(TestsBase):
         resp = self.client.get('/api/posts')
         return json.loads(resp.get_data()).get('csrfToken')
 
-    def post_in_response(self, post, response):
-        data = json.loads(response)
-        post_list = data.get('postList')
+    def post_in_json_response(self, post, response):
+        post_list = json.loads(response.get_data()).get('postList')
         for p in post_list:
             if post[0] == p.get('title') and post[1] == p.get('content'):
+                return True
+        return False
+
+    def rendered_post_in_json_response(self, post, response):
+        post_list = json.loads(response.get_data()).get('postList')
+        title = '<header><h4>%s</h4></header>' %post[0]
+        content = '<div class="post-content">%s</div>' %post[1]
+        for post in post_list:
+            if title in post and content in post:
                 return True
         return False
 

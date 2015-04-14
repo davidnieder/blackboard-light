@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.views import View
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, render_template
 from flask.ext.login import login_required, current_user
 from flask.ext.wtf.csrf import validate_csrf, generate_csrf
 
@@ -37,11 +37,18 @@ class BaseView(View):
 class Posts(BaseView):
 
     def get(self):
-        query = PostQuery(query_args=self.request_args, paginate=False)
+        query = PostQuery(query_args=self.request_args,paginate=False)
         query.fire()
 
-        self.response_data.update(postList=[post.to_public_dict() \
-                                    for post in query.post_list])
+        if self.request_args.renderPosts.data:
+            post_list = list()
+            for post in query.post_list:
+                template = render_template('post.html', post=post.to_public_dict())
+                post_list.append(template)
+        else:
+            post_list = [post.to_public_dict() for post in query.post_list]
+
+        self.response_data.update(postList=post_list)
         self.response_data.update(postAmount=query.results)
         has_more = True if query.total > query.results else False
         self.response_data.update(hasMore=has_more)

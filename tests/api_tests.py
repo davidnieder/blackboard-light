@@ -30,22 +30,46 @@ class ApiTests(TestsApiBase):
         self.login('sally', 'brown')
         resp = self.client.get('/api/posts')
         self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, 'application/json')
         data = json.loads(resp.get_data())
         self.assertEqual(data.get('postAmount'), 5) # limit defaults to 5
         self.assertTrue(data.get('hasMore'))
         for post in itertools.islice(self.posts, 0, 5):
-            self.assertFalse(self.post_in_response(post, resp.get_data()))
+            self.assertFalse(self.post_in_json_response(post, resp))
         for post in itertools.islice(self.posts, 5, None):
-            self.assertTrue(self.post_in_response(post, resp.get_data()))
+            self.assertTrue(self.post_in_json_response(post, resp))
 
         # limit=10
         resp = self.client.get('/api/posts?limit=10')
         self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, 'application/json')
         data = json.loads(resp.get_data())
         self.assertEqual(data.get('postAmount'), 10)
         self.assertFalse(data.get('hasMore'))
         for post in self.posts:
-            self.assertTrue(self.post_in_response(post, resp.get_data()))
+            self.assertTrue(self.post_in_json_response(post, resp))
+
+        # renderPosts
+        resp = self.client.get('/api/posts?renderPosts=false')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, 'application/json')
+        data = json.loads(resp.get_data())
+        self.assertEqual(data.get('postAmount'), 5)
+        self.assertTrue(data.get('hasMore'))
+        for post in itertools.islice(self.posts, 0, 5):
+            self.assertFalse(self.post_in_json_response(post, resp))
+        for post in itertools.islice(self.posts, 5, None):
+            self.assertTrue(self.post_in_json_response(post, resp))
+        resp = self.client.get('/api/posts?renderPosts=true')
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, 'application/json')
+        data = json.loads(resp.get_data())
+        self.assertEqual(data.get('postAmount'), 5)
+        self.assertTrue(data.get('hasMore'))
+        for post in itertools.islice(self.posts, 0, 5):
+            self.assertFalse(self.rendered_post_in_json_response(post, resp))
+        for post in itertools.islice(self.posts, 6, None):
+            self.assertTrue(self.rendered_post_in_json_response(post, resp))
 
     # test DELETE errors
     def test_posts_delete_http_errors(self):
