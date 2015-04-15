@@ -38,7 +38,6 @@ class ApiTests(TestsApiBase):
             self.assertFalse(self.post_in_json_response(post, resp))
         for post in itertools.islice(self.posts, 5, None):
             self.assertTrue(self.post_in_json_response(post, resp))
-
         # limit=10
         resp = self.client.get('/api/posts?limit=10')
         self.assertEqual(resp.status_code, 200)
@@ -48,7 +47,6 @@ class ApiTests(TestsApiBase):
         self.assertFalse(data.get('hasMore'))
         for post in self.posts:
             self.assertTrue(self.post_in_json_response(post, resp))
-
         # renderPosts
         resp = self.client.get('/api/posts?renderPosts=false')
         self.assertEqual(resp.status_code, 200)
@@ -75,27 +73,40 @@ class ApiTests(TestsApiBase):
     def test_posts_delete_http_errors(self):
         self.populate_database(3)
         # unauthorized
-        resp = self.client.delete('/api/posts?csrfToken=%s' %self.get_csrf_token())
+        data = json.dumps(dict(csrfToken=self.get_csrf_token(), postId=1))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
         self.assertEqual(resp.status_code, 401)
         self.assertTrue('Unauthorized' in resp.get_data())
         # without csrf token
         self.login('linus', 'vanPelt')
-        resp = self.client.delete('/api/posts')
+        data = json.dumps(dict(postId=1))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
         self.assertEqual(resp.status_code, 400)
         self.assertTrue('Bad Request' in resp.get_data())
         # malformed post id
-        resp = self.client.delete('api/posts?csrfToken=%s&postId=abc'
-                %self.get_csrf_token())
+        data = json.dumps(dict(csrfToken=self.get_csrf_token(), postId='abc'))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
+        self.assertEqual(resp.status_code, 400)
+        self.assertTrue('Bad Request' in resp.get_data())
+        # no post id
+        data = json.dumps(dict(csrfToken=self.get_csrf_token()))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
         self.assertEqual(resp.status_code, 400)
         self.assertTrue('Bad Request' in resp.get_data())
         # not existing post
-        resp = self.client.delete('api/posts?csrfToken=%s&postId=11'
-                %self.get_csrf_token())
+        data = json.dumps(dict(csrfToken=self.get_csrf_token(), postId=4))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
         self.assertEqual(resp.status_code, 404)
         self.assertTrue('Not Found' in resp.get_data())
         # insufficient rights
-        resp = self.client.delete('api/posts?csrfToken=%s&postId=3'
-                %self.get_csrf_token())
+        data = json.dumps(dict(csrfToken=self.get_csrf_token(), postId=3))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
         self.assertEqual(resp.status_code, 403)
         self.assertTrue('Forbidden' in resp.get_data())
 
@@ -103,8 +114,9 @@ class ApiTests(TestsApiBase):
     def test_posts_delete_valid_request(self):
         self.populate_database(1)
         self.login('linus', 'vanPelt')
-        resp = self.client.delete('api/posts?csrfToken=%s&postId=1'
-                %self.get_csrf_token())
+        data = json.dumps(dict(postId=1, csrfToken=self.get_csrf_token()))
+        resp = self.client.delete('/api/posts', data=data,
+                content_type='application/json')
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(json.loads(resp.get_data()).get('success'))
 

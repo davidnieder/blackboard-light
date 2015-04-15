@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.views import View
+from werkzeug.datastructures import MultiDict
 from flask import jsonify, request, abort, render_template
 from flask.ext.login import login_required, current_user
 from flask.ext.wtf.csrf import validate_csrf, generate_csrf
@@ -15,13 +16,14 @@ class BaseView(View):
 
     def __init__(self):
         self.request_args = RequestArgs(formdata=request.args)
+        self.request_data = RequestArgs(formdata=MultiDict(request.get_json()))
         self.response_data = dict()
 
         if not self.request_args.validate():
             abort(400)
 
         if request.method in ['DELETE']:
-            if not validate_csrf(self.request_args.csrfToken.data):
+            if not validate_csrf(self.request_data.csrfToken.data):
                 abort(400)
 
         self.response_data.update(csrfToken=generate_csrf())
@@ -58,9 +60,9 @@ class DeletePost(BaseView):
     decorators = [login_required]
 
     def delete(self):
-        if not self.request_args.postId.data:
+        if not self.request_data.postId.data:
             abort(400)
-        post = Post.query.get_or_404(self.request_args.postId.data)
+        post = Post.query.get_or_404(self.request_data.postId.data)
         if post.user_id != current_user.id and not current_user.is_admin:
             abort(403)
 
