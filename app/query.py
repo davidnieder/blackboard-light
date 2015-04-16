@@ -48,61 +48,61 @@ class PostQuery(object):
         # a not logged-in user can only see public posts
         if not current_user.is_authenticated():
             query = query.filter_by(is_public=True)
-    
+
         # query for a particular post
         if self.query_args.postId.data:
             query = query.filter_by(id=query_args.postId.data)
             self.next_req_args['postId'] = query_args.postId.data
-    
+
         # all posts with an id greater than x
         if self.query_args.sincePost.data:
             query = query.filter(Post.id>query_args.sincePost.data)
             self.next_req_args['sincePost'] = query_args.sincePost.data
-    
+
         # all posts with an id smaller than x
         if self.query_args.beforePost.data:
             query = query.filter(Post.id<query_args.beforePost.data)
             self.next_req_args['beforePost'] = query_args.beforePost.data
-    
+
         # exclude posts which are marked private
         if self.query_args.onlyPublicPosts.data is True:
             query = query.filter(Post.is_public == True)
-    
+
         # exclude posts which are marked public
         if self.query_args.onlyPrivatePosts.data is True:
             query = query.filter(Post.is_public == False)
-    
+
         # all posts from a specific user
         if self.query_args.user.data:
             user = User.query.filter_by(name=query_args.user.data).first()
             user_id = user.id if user else 0
             query = query.filter_by(user_id=user_id)
             self.next_req_args['user'] = query_args.user.data
-    
+
         # all posts with certain tags, ignoring tags that don't exist
         if self.query_args.tags.data:
             self.next_req_args['tags'] = query_args.tags.query_string()
             for tag in query_args.tags.data:
                 query = query.filter(Post.tags.any(name=tag.name))
-    
+
         # all posts created since a given date, excluding posts from the date
         if self.query_args.since.data:
             date = query_args.since.data
             query = query.filter(Post.time >= date+timedelta(1))
             self.next_req_args['since'] = query_args.since.data.isoformat()
-    
+
         # all posts created before a given date
         if self.query_args.before.data:
             query = query.filter(Post.time < query_args.before.data)
             self.next_req_args['before'] = query_args.before.data.isoformat()
-    
+
         # all posts created on a specific date
         if self.query_args.createdOn.data:
             date = query_args.createdOn.data
             query = query.filter(Post.time >= date)
             query = query.filter(Post.time < date+timedelta(1))
             self.next_req_args['createdOn'] = date.isoformat()
-    
+
         # order posts ascending if requested and descending by default
         if self.query_args.order.data == u'asc':
             query = query.order_by(Post.id.asc())
