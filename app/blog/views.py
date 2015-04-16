@@ -45,7 +45,7 @@ class Index(BaseView):
         BaseView.__init__(self)
 
     def get(self):
-        query = PostQuery(query_args=self.request_args, paginate=True)
+        query = PostQuery(query_args=self.request_args)
         query.fire()
 
         self.response_data['post_list'] = [post.to_public_dict() \

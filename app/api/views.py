@@ -39,7 +39,7 @@ class BaseView(View):
 class Posts(BaseView):
 
     def get(self):
-        query = PostQuery(query_args=self.request_args,paginate=False)
+        query = PostQuery(query_args=self.request_args)
         query.fire()
 
         if self.request_args.renderPosts.data:
@@ -52,7 +52,7 @@ class Posts(BaseView):
 
         self.response_data.update(postList=post_list)
         self.response_data.update(postAmount=query.results)
-        has_more = True if query.total > query.results else False
+        has_more = query.has_more
         self.response_data.update(hasMore=has_more)
 
 class DeletePost(BaseView):

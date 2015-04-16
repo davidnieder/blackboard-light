@@ -11,29 +11,26 @@ from .forms import RequestArgs
 
 class PostQuery(object):
 
-    def __init__(self, query_args, paginate=False):
+    def __init__(self, query_args):
         self.query = Post.query
         self.query_args = query_args
         self.next_req_args = dict()
-        self.paginate = paginate
         self.per_page = app.config['POSTS_PER_PAGE']
-        self.prev_page = 0
-        self.curr_page = 0
+        self.post_list = list()
+        self.previous_page = 0
+        self.current_page = 0
         self.next_page = 0
         self.results = 0
         self.total = 0
+        self.has_more = False
 
     def fire(self):
         self._filter()
-        if self.paginate:
-            self._paginate()
-        else:
-            self.post_list = self.query.all()
-            self.results = len(self.post_list)
+        self._paginate()
         return self
 
     def _paginate(self):
-        page_no = self.query_args.page.data if self.query_args.page.data else 0
+        page_no = self.query_args.page.data if self.query_args.page.data else 1
         pagination = self.query.paginate(page_no, self.per_page, False)
         self.post_list = pagination.items
         self.previous_page = pagination.prev_num
@@ -41,7 +38,7 @@ class PostQuery(object):
         self.next_page = pagination.next_num if pagination.has_next else 0
         self.results = len(pagination.items)
         self.total = pagination.total
-        self.pagination = pagination
+        self.has_more = pagination.has_next
 
     def _filter(self):
         # shortcuts
@@ -112,10 +109,5 @@ class PostQuery(object):
             self.next_req_args['order'] = u'asc'
         else:
             query = query.order_by(Post.id.desc())
-
-        # limit post amount, ignore when paginating
-        if self.query_args.limit.data and not self.paginate:
-            self.total = query.count()
-            query = query.limit(self.query_args.limit.data)
 
         self.query = query

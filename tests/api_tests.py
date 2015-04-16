@@ -32,20 +32,11 @@ class ApiTests(TestsApiBase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.mimetype, 'application/json')
         data = json.loads(resp.get_data())
-        self.assertEqual(data.get('postAmount'), 5) # limit defaults to 5
+        self.assertEqual(data.get('postAmount'), 5)
         self.assertTrue(data.get('hasMore'))
         for post in itertools.islice(self.posts, 0, 5):
             self.assertFalse(self.post_in_json_response(post, resp))
         for post in itertools.islice(self.posts, 5, None):
-            self.assertTrue(self.post_in_json_response(post, resp))
-        # limit=10
-        resp = self.client.get('/api/posts?limit=10')
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.mimetype, 'application/json')
-        data = json.loads(resp.get_data())
-        self.assertEqual(data.get('postAmount'), 10)
-        self.assertFalse(data.get('hasMore'))
-        for post in self.posts:
             self.assertTrue(self.post_in_json_response(post, resp))
         # renderPosts
         resp = self.client.get('/api/posts?renderPosts=false')

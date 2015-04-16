@@ -71,15 +71,6 @@ class ViewTestsHTTPErrors(TestsBase):
         self.assertEqual(resp.status_code, 400)
         self.assertEqual(resp.mimetype, 'text/html')
         self.assertTrue('Bad Request' in resp.get_data())
-        # limit
-        resp = self.client.get('/?limit=0')
-        self.assertEqual(resp.status_code, 400)
-        self.assertEqual(resp.mimetype, 'text/html')
-        self.assertTrue('Bad Request' in resp.get_data())
-        resp = self.client.get('/?limit=abc')
-        self.assertEqual(resp.status_code, 400)
-        self.assertEqual(resp.mimetype, 'text/html')
-        self.assertTrue('Bad Request' in resp.get_data())
 
     def test_login_view_http_errors(self):
         # post request without csrf token

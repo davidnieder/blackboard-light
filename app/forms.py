@@ -65,8 +65,6 @@ class RequestArgs(Form):
     since = DateField()
     before = DateField()
     createdOn = DateField()
-    limit = IntegerField(validators=[Optional(), NumberRange(min=1,max=10)],
-                         default=5)
     renderPosts = BooleanField(default=False)
     csrfToken = StringField()
 
