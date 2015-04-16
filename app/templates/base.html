@@ -10,12 +10,13 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='blackboard.css') }}">
 
-  <script src="{{ url_for('static', filename='jquery-2.1.3.min.js') }}"></script>
+{% block scripts %}
+{% endblock scripts %}
 
 {% block title %}
   <title>Blackboard Light</title>
-{% endblock %}
-{% endblock %}
+{% endblock title %}
+{% endblock head %}
 </head>
 <body>
 <div class="container">
@@ -23,19 +24,19 @@
 {# navigation block #}
 {% block navigation %}
   <section id="navigation">
-      <a href="{{ url_for('.index') }}">Home</a> | 
+      <a href="{{ url_for('.index') }}">Home</a> |
       <a href="#">Search</a> |
       {% if current_user.is_anonymous() %}
       <a href="{{ url_for('.login') }}">Login</a>
       {% else %}
-      <a href="{{ url_for('.new_post') }}">New post</a> | 
+      <a href="{{ url_for('.new_post') }}">New post</a> |
       logged in as <i>{{ current_user.name }}</i>
       (<a href="{{ url_for('.logout', csrfToken=csrf_token()) }}">Logout</a>)
       {% endif %}
       <hr>
   </section>  <!-- end block navigation -->
-{% endblock %}
-  
+{% endblock navigation %}
+
 {# message flashing #}
 {% block flash_messages %}
 {% with messages = get_flashed_messages(with_categories=True) %}
@@ -48,11 +49,11 @@
   </section>  <!-- end block messages -->
 {% endif %}
 {% endwith %}
-{% endblock %}
+{% endblock  flash_messages %}
 
 {#- content block #}
 {% block content %}
-{% endblock %}
+{% endblock content %}
 
 {# site footer #}
   <section id="site-footer">

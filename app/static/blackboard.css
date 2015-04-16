@@ -4,13 +4,15 @@ section#navigation {
 }
 
 /* flash messages */
-section#messages .info  {
-  color: #222;
+section#messages  {
   font-size: 105%;
   font-weight: 500;
 }
+section#messages .info  {
+  color: #222;
+}
 section#messages .error  {
-  color: #F00;
+  color: #f00;
 }
 
 /* posts */
@@ -33,11 +35,26 @@ section#content article footer  {
   font-size: 92%;
 }
 
-/* footer */
-section#site-footer {
-  font-size: 90%;
+/* load-dynamic */
+section#load-dynamic {
+  display: none;
+}
+section#load-dynamic span {
+  display: none;
+}
+span#load-more-error  {
+  color: #f00;
+}
+span#loading-indicator img  {
+  vertical-align: top;
 }
 
+/* footer */
+section#site-footer {
+  font-size: 92%;
+}
+
+/* forms */
 .checkbox-with-label  {
   margin-bottom: 1.5rem;
 }
@@ -49,10 +66,9 @@ section#site-footer {
   display: inline;
   vertical-align: middle;
 }
-
 textarea + span.wtforms-error {
   vertical-align: top;
 }
 .wtforms-error  {
-  color: #F00;
+  color: #f00;
 }

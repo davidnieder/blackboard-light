@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 
+{% block scripts %}
+  <script src="{{ url_for('static', filename='jquery-2.1.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='blackboard.js') }}"></script>
+  <script>
+    var postFilter = {{ query_args |tojson|safe }};
+    var nextPage = {{ next_page }};
+    $(document).ready(initPage);
+  </script>
+{% endblock scripts %}
+
 {% block title %}
   <title>Page {{ current_page }} - Blackboard Light</title>
 {% endblock %}
@@ -12,6 +22,7 @@
 
     {% endfor %}
     <hr>
+  {% endif %}
   </section>  <!-- end block content -->
 
   <section id="page-links">
@@ -23,6 +34,16 @@
     <a href="{{ url_for('.index', page=next_page, **query_args) }}">next page &rarr;</a>
     {% endif %}
     <hr>
-  </section> 
-  {% endif %}
+  </section>
+
+  <section id="load-dynamic">
+    <span id="load-more-link"><a href="#">Load more posts</a></span>
+    <span id="no-more-posts">There are no more posts. <a href="#">Top &uarr;</a></span>
+    <span id="load-more-error"><span></span> <a href='#'>Try again</a></span>
+    <span id="loading-indicator">
+      <img src="{{ url_for('static', filename='spin.svg') }}">
+      Loading more posts&hellip;
+    </span>
+    <hr>
+  </section>
 {% endblock  content %}

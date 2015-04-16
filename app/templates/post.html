@@ -12,9 +12,10 @@
         {%- if not loop.last %}, {% endif %}
         {% endfor %}
         {% if current_user.name == post.user or current_user.is_admin %}
+
         <div class="admin-links">
           <a href="{{ url_for('blog.edit_post', postId=post.id) }}">edit post</a> |
-          <a href="{{ url_for('blog.delete_post', postId=post.id, csrfToken=csrf_token()) }}">delete post</a>
+          <a href="{{ url_for('blog.delete_post', postId=post.id, csrfToken=csrf_token()) }}" data-post-id="{{ post.id }}">delete post</a>
         </div>
         {%- endif %}
 
