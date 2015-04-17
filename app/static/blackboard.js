@@ -42,14 +42,12 @@ function initPageLinks()  {
   initDeleteLinks();
   /* hide prev-page/next-page links */
   $('#page-links').hide();
-  /* show load-more-dynamic link, load-more event handler */
-  $('#load-dynamic').show();
   if (nextPage) {
+    /* show load-more-dynamic link, load-more event handler */
+    $('#load-dynamic').show();
     $('#load-more-link').show();
     $('#load-more-link').find('a').on('click', loadMoreClicked);
     $('#load-more-error').find('a').on('click', loadMoreClicked);
-  } else {
-    $('#no-more-posts').show();
   }
   /* add click-event to scroll-to-top link */
   $('#no-more-posts').find('a').on('click', function(event)  {

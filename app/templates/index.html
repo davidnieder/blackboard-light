@@ -14,6 +14,17 @@
   <title>Page {{ current_page }} - Blackboard Light</title>
 {% endblock %}
 
+{% block post_filter %}
+{% if query_args %}
+  <section id="post-filter">
+    <a href="{{ url_for('.index') }}">
+      <img src="{{ url_for('static', filename='close.png') }}" class="u-pull-right">
+    </a>
+    Post-Filter: {{ query_args | queryprint }}
+  </section>
+{% endif %}
+{% endblock post_filter %}
+
 {% block content %}
   <section id="content">
   {% if post_list %}

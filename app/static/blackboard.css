@@ -15,6 +15,18 @@ section#messages .error  {
   color: #f00;
 }
 
+/* post filter */
+section#post-filter {
+  margin-bottom: 1.5rem;
+  padding: .7rem 0;
+  background-color: #e1e1e1;
+}
+section#post-filter img {
+  float: right;
+  vertical-align: middle;
+  margin-right: .5rem;
+}
+
 /* posts */
 section#content article {
   margin-bottom: 3rem;

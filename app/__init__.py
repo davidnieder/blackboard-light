@@ -4,6 +4,7 @@ from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.wtf.csrf import CsrfProtect
 
+import jinja
 from models import db, load_user
 
 
@@ -23,12 +24,7 @@ def app_factory(config):
     CsrfProtect(app)
 
     # jinja2 config
-    app.jinja_env.trim_blocks = True
-    app.jinja_env.lstrip_blocks = True
-    app.jinja_env.filters['datetime'] = lambda(o):o.strftime \
-        ('%d.%m.%y - %H:%M utc') if hasattr(o,'strftime') else o
-    app.jinja_env.filters['date'] = lambda(o):o.strftime \
-        ('%B %d, %Y') if hasattr(o,'strftime') else o
+    jinja.init_app(app)
 
     # blueprints
     from blog import blog

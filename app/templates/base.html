@@ -37,6 +37,10 @@
   </section>  <!-- end block navigation -->
 {% endblock navigation %}
 
+{# post-filter message #}
+{% block post_filter %}
+{% endblock post_filter %}
+
 {# message flashing #}
 {% block flash_messages %}
 {% with messages = get_flashed_messages(with_categories=True) %}

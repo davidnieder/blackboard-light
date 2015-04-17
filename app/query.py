@@ -67,10 +67,12 @@ class PostQuery(object):
         # exclude posts which are marked private
         if self.query_args.onlyPublicPosts.data is True:
             query = query.filter(Post.is_public == True)
+            self.next_req_args['onlyPublicPosts'] = query_args.onlyPublicPosts.data
 
         # exclude posts which are marked public
         if self.query_args.onlyPrivatePosts.data is True:
             query = query.filter(Post.is_public == False)
+            self.next_req_args['onlyPrivatePosts'] = query_args.onlyPrivatePosts.data
 
         # all posts from a specific user
         if self.query_args.user.data:
