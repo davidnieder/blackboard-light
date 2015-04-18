@@ -176,6 +176,32 @@ class ViewTestsValid(TestsBase):
         for post in itertools.islice(self.posts, 5, None):
             self.assertTrue(self.post_in_response(post, resp))
 
+    def test_index_searchstring_arg(self):
+        # query with searchString argument
+        self.populate_database()
+        resp = self.client.get('/?searchString=Post#')
+        self.assertEqual(resp.status_code, 200)
+        for post in self.posts:
+            if post[3] == 'y':
+                self.assertTrue(self.post_in_response(post, resp))
+            else:
+                self.assertFalse(self.post_in_response(post, resp))
+        self.login('sally', 'brown')
+        resp = self.client.get('/?searchString=first post')
+        self.assertEqual(resp.status_code, 200)
+        self.assertTrue(self.post_in_response(self.posts[0], resp))
+        for post in itertools.islice(self.posts, 1, None):
+            self.assertFalse(self.post_in_response(post, resp))
+        resp = self.client.get('/?searchString=Post#&order=asc')
+        self.assertEqual(resp.status_code, 200)
+        for post in itertools.islice(self.posts, 0, 5):
+            self.assertTrue(self.post_in_response(post, resp))
+        for post in itertools.islice(self.posts, 5, None):
+            self.assertFalse(self.post_in_response(post, resp))
+        #resp = self.client.get('/?searchString=fifth sixth')
+        #self.assertTrue(resp.status_code, 200)
+        #self.assertTrue(messages.empty_response in resp.get_data())
+
     def test_index_query_multiple_args(self):
         # query with multiple arguments
         self.populate_database()

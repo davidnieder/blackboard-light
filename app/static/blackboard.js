@@ -97,7 +97,7 @@ function deletePost(postId, $post, $link)  {
     success: function(resp) {
       if (resp.success) {
         $post.fadeOut(1000);
-        $post.remove();
+        setTimeout($post.remove, 1100);
       }
     },
     error: function(xhr, status, error) {

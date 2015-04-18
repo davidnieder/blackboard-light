@@ -13,27 +13,32 @@ def isodate(obj):
 def queryprint(queryargs):
     string = unicode()
     if 'postId' in queryargs:
-        string += '%s=%s AND ' %('Id', queryargs['postId'])
+        string += '%s=%s AND ' %('id', queryargs['postId'])
     if 'user' in queryargs:
-        string += '%s=%s AND ' %('User', queryargs['user'])
+        string += '%s=%s AND ' %('user', queryargs['user'])
     if 'tags'in queryargs:
-        string += '%s=%s AND ' %('Tags', queryargs['tags'])
+        string += '%s=%s AND ' %('tags', queryargs['tags'])
     if 'sincePost' in queryargs:
-        string += '%s=%s AND ' %('Since-Post', queryargs['sincePost'])
+        string += '%s=%s AND ' %('since-post', queryargs['sincePost'])
     if 'beforePost' in queryargs:
-        string += '%s=%s AND ' %('Before-Post', queryargs['beforePost'])
+        string += '%s=%s AND ' %('before-post', queryargs['beforePost'])
     if 'since' in queryargs:
-        string += '%s=%s AND ' %('Since', queryargs['since'])
+        string += '%s=%s AND ' %('since', queryargs['since'])
     if 'before' in queryargs:
-        string += '%s=%s AND ' %('Before', queryargs['before'])
+        string += '%s=%s AND ' %('before', queryargs['before'])
     if 'createdOn' in queryargs:
-        string += '%s=%s AND ' %('Date', queryargs['createdOn'])
+        string += '%s=%s AND ' %('date', queryargs['createdOn'])
     if 'onlyPrivatePosts' in queryargs:
-        string += 'Only-Private-Posts AND '
+        string += 'only-private-posts AND '
     if 'onlyPublicPosts' in queryargs:
-        string += 'Only-Public-Posts AND '
+        string += 'only-public-posts AND '
+    if 'searchString' in queryargs:
+        string += 'contains="%s" AND ' %queryargs['searchString']
     if 'order' in queryargs:
-        string += '%s=%s AND ' %('Order', queryargs['order'])
+        if queryargs['order'] == 'asc':
+            string += '%s=%s AND ' %('order', 'ascending')
+        elif queryargs['order'] == 'desc':
+            string += '%s=%s AND ' %('order', 'descending')
     return string.rstrip(' AND ')
 
 def init_app(app):

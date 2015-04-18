@@ -1,6 +1,7 @@
 flask
 flask-login
-flask-sqlalchemy
 flask-wtf
+flask-sqlalchemy
+git+https://github.com/davidnieder/Flask-WhooshAlchemy.git
 beautifulsoup4
 coverage

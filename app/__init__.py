@@ -3,9 +3,10 @@
 from flask import Flask
 from flask.ext.login import LoginManager
 from flask.ext.wtf.csrf import CsrfProtect
+from flask.ext.whooshalchemy import whoosh_index
 
 import jinja
-from models import db, load_user
+from models import db, Post, load_user
 
 
 def app_factory(config):
@@ -15,6 +16,7 @@ def app_factory(config):
 
     # database
     db.init_app(app)
+    whoosh_index(app, Post)
 
     # flask-login
     login_manager = LoginManager(app)

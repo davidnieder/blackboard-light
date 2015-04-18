@@ -66,6 +66,7 @@ class RequestArgs(Form):
     before = DateField()
     createdOn = DateField()
     renderPosts = BooleanField(default=False)
+    searchString = StringField()
     csrfToken = StringField()
 
     def __init__(self, csrf_enabled=False, *args, **kwargs):

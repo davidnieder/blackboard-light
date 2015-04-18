@@ -105,11 +105,19 @@ class PostQuery(object):
             query = query.filter(Post.time < date+timedelta(1))
             self.next_req_args['createdOn'] = date.isoformat()
 
-        # order posts ascending if requested and descending by default
-        if self.query_args.order.data == u'asc':
+        # order posts: ascending, descending (default) or by search rank
+        if self.query_args.order.data == 'asc':
             query = query.order_by(Post.id.asc())
-            self.next_req_args['order'] = u'asc'
-        else:
+            self.next_req_args['order'] = 'asc'
+        elif self.query_args.order.data == 'desc':
             query = query.order_by(Post.id.desc())
+            self.next_req_args['order'] = 'desc'
+        elif not self.query_args.searchString.data:
+            query = query.order_by(Post.id.desc())
+
+        # search
+        if self.query_args.searchString.data:
+            query = query.whoosh_search(self.query_args.searchString.data)
+            self.next_req_args['searchString'] = query_args.searchString.data
 
         self.query = query

@@ -41,6 +41,7 @@ tag_lookups = db.Table('tag_lookups',
 
 class Post(db.Model):
     __tablename__ = 'posts'
+    __searchable__ = ['title', 'content']
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
