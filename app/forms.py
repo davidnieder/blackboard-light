@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import unicode_literals
+
 from flask.ext.wtf import Form
 from wtforms.widgets import TextInput
 from wtforms.validators import Required, Length, Optional, NumberRange, Regexp, AnyOf
@@ -14,9 +16,9 @@ class TagListField(Field):
 
     def _value(self):
         if self.data:
-            return u', '.join(tag.name for tag in self.data)
+            return ', '.join(tag.name for tag in self.data)
         else:
-            return u''
+            return ''
 
     def query_string(self):
         return self._value().replace(' ', '')
