@@ -9,6 +9,8 @@ class Config(object):
     DEBUG = False
     TESTING = False
     POSTS_PER_PAGE = 5
+    IMPRINT = u'https://example.com/imprint.html'
+    FEEDBACK_MAIL = u'feedback@example.com'
 
 
 class DevelopmentConfig(Config):
