@@ -21,15 +21,14 @@
 <body>
 <div class="container">
 
-{# navigation block #}
 {% block navigation %}
   <section id="navigation">
       <a href="{{ url_for('.index') }}">Home</a> |
-      <a href="#">Search</a> |
+      <a href="{{ url_for('.search') }}">Search</a> |
       {% if current_user.is_anonymous() %}
       <a href="{{ url_for('.login') }}">Login</a>
       {% else %}
-      <a href="{{ url_for('.new_post') }}">New post</a> |
+      <a href="{{ url_for('.new_post') }}">New Post</a> |
       logged in as <i>{{ current_user.name }}</i>
       (<a href="{{ url_for('.logout', csrfToken=csrf_token()) }}">Logout</a>)
       {% endif %}
@@ -37,11 +36,9 @@
   </section>  <!-- end block navigation -->
 {% endblock navigation %}
 
-{# post-filter message #}
 {% block post_filter %}
 {% endblock post_filter %}
 
-{# message flashing #}
 {% block flash_messages %}
 {% with messages = get_flashed_messages(with_categories=True) %}
 {% if messages %}
@@ -55,11 +52,9 @@
 {% endwith %}
 {% endblock  flash_messages %}
 
-{#- content block #}
 {% block content %}
 {% endblock content %}
 
-{# site footer #}
   <section id="site-footer">
     site footer
   </section>

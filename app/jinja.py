@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import datetime
+
+
 def date(obj):
     if hasattr(obj, 'strftime'):
         return obj.strftime('%B %d, %Y')
     return obj
+
+def today():
+    return datetime.date.today().isoformat()
 
 def isodate(obj):
     if hasattr(obj, 'date'):
@@ -47,3 +53,4 @@ def init_app(app):
     app.jinja_env.filters['date'] = date
     app.jinja_env.filters['isodate'] = isodate
     app.jinja_env.filters['queryprint'] = queryprint
+    app.jinja_env.globals['today'] = today

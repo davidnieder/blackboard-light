@@ -16,3 +16,5 @@ blog.add_url_rule('/newPost', view_func=views.NewPost.as_view('new_post'))
 blog.add_url_rule('/editPost', view_func=views.EditPost.as_view('edit_post'))
 blog.add_url_rule('/deletePost', view_func=views.DeletePost.as_view('delete_post'))
 
+# search
+blog.add_url_rule('/search', view_func=views.Search.as_view('search'))

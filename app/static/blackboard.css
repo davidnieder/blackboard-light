@@ -47,6 +47,14 @@ section#content article footer  {
   font-size: 92%;
 }
 
+/* search */
+section#search-mask h5  {
+  margin-bottom: .4rem;
+}
+section#search-mask input[type='submit'] {
+  margin-top: 1.5rem;
+}
+
 /* load-dynamic */
 section#load-dynamic {
   display: none;

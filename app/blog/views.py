@@ -179,3 +179,10 @@ class DeletePost(EditPost):
         flash(messages.post_deleted, 'info')
         return redirect(url_for('.index'))
 
+
+class Search(BaseView):
+
+    def __init__(self):
+        BaseView.__init__(self)
+        self.template = 'search.html'
+

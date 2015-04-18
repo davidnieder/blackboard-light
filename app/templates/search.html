@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}
+  <title>Search - Blackboard</title>
+{% endblock title %}
+
+{% block content %}
+  <section id="search-mask">
+    <h4>Search</h4>
+    <form method="GET" action="{{ url_for('.index') }}">
+      <div class="row">
+        <div class="one-third column">
+          <label for="searchString">Keywords:</label>
+          <input id="searchString" name="searchString" type="text">
+        </div>
+        <div class="one-third column">
+          <label for="user">Username:</label>
+          <input id="user" name="user" type="text">
+        </div>
+        <div class="one-third column">
+          <label for="tags">Tags (comma seperated):</label>
+          <input id="tags" name="tags" type="text">
+        </div>
+      </div>
+      <h5>Dates</h5>
+      <div class="row">
+        <div class="one-third column">
+          <label for="createdOn">Posted on:</label>
+          <input id="createdOn" name="createdOn" placeholder="{{ today() }}" type="date">
+        </div>
+        <div class="one-third column">
+          <label for="before">Posted before:</label>
+          <input id="before" name="before" placeholder="{{ today() }}" type="date">
+        </div>
+        <div class="one-third column">
+          <label for="since">Posted since:</label>
+          <input id="since" name="since" placeholder="{{ today() }}" type="date">
+        </div>
+      </div>
+      {% if current_user.is_authenticated() %}
+      <h5>Exclude</h5>
+      <div class="row">
+        <div class="one-third column checkbox-with-label">
+          <input id="onlyPrivatePosts" name="onlyPrivatePosts" type="checkbox" value="true">
+          <label for="onlyPrivatePosts">Exclude public posts</label>
+        </div>
+        <div class="one-third column checkbox-with-label">
+          <input id="onlyPublicPosts" name="onlyPublicPosts" type="checkbox" value="true">
+          <label for="onlyPublicPosts">Exclude private posts</label>
+        </div>
+      </div>
+      {% endif %}
+      <h5>Result Order</h5>
+      <div class="row">
+        <div class="one-third column">
+          <select id="order" name="order" placeholder="search rank">
+            <option value="">search rank</option>
+            <option value="desc">descending</option>
+            <option value="asc">ascending</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="one-third column">
+          <input type="submit" value="Search">
+        </div>
+      </div>
+    </form>
+    <hr>
+  </section> <!-- end block search-mask -->
+{% endblock content %}
