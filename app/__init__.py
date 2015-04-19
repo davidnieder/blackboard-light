@@ -5,8 +5,8 @@ from flask.ext.login import LoginManager
 from flask.ext.wtf.csrf import CsrfProtect
 from flask.ext.whooshalchemy import whoosh_index
 
-import jinja
-from models import db, Post, load_user
+from . import jinja
+from .models import db, Post, load_user
 
 
 def app_factory(config):

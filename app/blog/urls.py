@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import blog
-import views
+from . import views
 
 
 # index

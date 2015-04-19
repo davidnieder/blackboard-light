@@ -4,4 +4,4 @@ from flask import Blueprint
 
 blog = Blueprint('blog', __name__)
 
-import urls
+from . import urls

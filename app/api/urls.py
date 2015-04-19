@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from . import api
-import views
+from . import views
 
 
 # post query endpoint
