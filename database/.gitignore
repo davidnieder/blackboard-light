@@ -1,3 +1,4 @@
 *.db
+search_index
 search_index_development
 search_index_testing

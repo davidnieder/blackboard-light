@@ -2,4 +2,5 @@
 *.swp
 *.pyc
 config_production.py
+blackboard-light.wsgi
 venv/

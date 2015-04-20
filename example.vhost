@@ -1,0 +1,35 @@
+<VirtualHost *:80>
+    ServerAdmin www-admin@your-domain.com
+    ServerName blog.your-domain.com
+    ServerAlias www.blog.your-domain.com
+
+    Redirect permanent / https://blog.your-domain.com/
+</VirtualHost>
+
+<IFModule mod_ssl.c>
+<VirtualHost *:443>
+    DocumentRoot "/var/www/blackboard-light"
+    ServerName blog.your-domain.com
+    ServerAlias www.blog.your-domain.com
+ 
+    SSLEngine On
+    SSLCertificateFile /etc/apache2/sslcert/your-domain.com.crt
+    SSLCertificateKeyFile /etc/apache2/sslcert/your-domain.com.key
+
+    WSGIScriptAlias / /var/www/blackboard-light/blackboard-light.wsgi
+    WSGIDaemonProcess blackboard-light user=www-data group=www-data threads=2
+
+    # let apache serve our static files
+    Alias /static /var/www/blackboard-light/app/static
+
+    <Directory /var/www/blackboard-light>
+        WSGIProcessGroup blackboard-light
+        WSGIApplicationGroup %{GLOBAL}
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    CustomLog "/var/log/apache2/blackboard-light.your-domain.com-access-ssl.log" vhost_combined
+    ErrorLog "/var/log/apache2/blackboard-light.your-domain.com-error-ssl.log"
+</VirtualHost>
+</IFModule>
