@@ -1,3 +1,9 @@
+### about
+blackboard-light is a simple, [flask](http://flask.pocoo.org/) powered blog engine. looks like [this](https://github.com/davidnieder/blackboard-light/raw/master/screenshot.png).
+
+### requirements
+python2 (only tested with v2.7), virtualenv
+
 ### setup development environment
 ```bash
 # clone this repo:
@@ -48,4 +54,15 @@ $ ln -s ../sites-available/blackboard-light blackboard-light
 $ apachectl configtest
 $ apachectl restart
 ```
+
+### used libs/frameworks
+* flask, werkzeug, jinja2
+* wtforms, flask-wtforms
+* sqlalchemy, flask-sqlalchemy
+* whoosh, flask-whooshalchemy
+* flask-login
+* beautifulsoup
+* coverage
+* jquery
+* skeleton.css, normalize.css
 
