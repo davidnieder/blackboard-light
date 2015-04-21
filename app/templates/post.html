@@ -6,7 +6,7 @@
         <a href="{{ url_for('blog.index', user=post.user) }}">{{ post.user }}</a> on
         <a href="{{ url_for('blog.index', createdOn=post.time |isodate) }}">
         {{ post.time |date }}</a>
-        {%- for tag in post.tags %}
+        {%- for tag in post.tags |sort %}
         {% if loop.first %} | {% endif -%}
         <a href="{{ url_for('blog.index', tags=tag) }}">{{ tag }}</a>
         {%- if not loop.last %}, {% endif %}
